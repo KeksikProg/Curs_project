@@ -5,20 +5,9 @@
 
 #define _USE_MATH_DEFINES
 
-/*
-1. двумерный массив (12x15):
-	12 команд всего
-	1. идентификатор
-	2. 12 задач, каждый отдельный столбик 
-	3. Оставшееся время
-	4. Кол-во памяти
 
-2. двумерный массив (12х2):
-	1. идентификатор
-	2. сумма баллов
-*/
 
-// Функции для заполнения массива
+// Functions for add elements in array
 void id_team(int ptr_array[12]) {
 	for (int i = 0; i < 12; i++) {
 		ptr_array[i] = rand() % 1000000;
@@ -46,7 +35,7 @@ void num_volume(int ptr_array[12][15]) {
 }
 //
 
-//Функция для подсчета очков команд
+//function for sum score for teams
 int num_score(int ptr_array[12][15], int index) {
 	int id_team = ptr_array[index], num_score = 0, time_score;
 
@@ -61,18 +50,10 @@ int num_score(int ptr_array[12][15], int index) {
 }
 //
 
-/*int num_score(int ptr_array[12][15], int index) {
-	int id_team = ptr_array[index], num_score = 0;
-
-	for (int i = 1; i < 13; i++) {
-		num_score += ptr_array[i][index];
-	}
-
-	return num_score;*/
 
 
 
-//Функции для вывода таблиц на экран
+//function for table on screen
 void table1_on_screen(int ptr_array[12][15]) {
 	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4 Зад.5 Зад.6 Зад.7 Зад.8 Зад.9 Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти");
 	for (int i = 0; i < 12; i++) { //nlines
@@ -95,7 +76,6 @@ void table2_on_screen(int ptr_array[12][15]) {
 
 
 void main() {
-	//system("chcp 1251");
 	setlocale(LC_ALL, "RUS");
 	int choose;
 	int table[15][12];
