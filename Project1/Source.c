@@ -55,11 +55,21 @@ int num_score(int ptr_array[12][15], int index) {
 
 //function for table on screen
 void table1_on_screen(int ptr_array[12][15]) {
-	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4 Зад.5 Зад.6 Зад.7 Зад.8 Зад.9 Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти");
+	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12   Ост.время  Исп.памяти");
 	for (int i = 0; i < 12; i++) { //nlines
 		printf("\n");
 		for (int j = 0; j < 15; j++) { //ncols
-			printf("%6d ", ptr_array[j][i]); //i * ncols + j
+			if (j != 13) {
+				printf("%6d ", ptr_array[j][i]);//i * ncols + j
+			}
+			else {
+				if (ptr_array[j][i] % 60 > 9){
+					printf("      0%d:%2d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+				}
+				else {
+					printf("      0%d:0%d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+				}
+			}
 		}
 	}
 	printf("\n");
@@ -77,6 +87,7 @@ void table2_on_screen(int ptr_array[12][15]) {
 
 void main() {
 	setlocale(LC_ALL, "RUS");
+	system("chcp 1251");
 	int choose;
 	int table[15][12];
 	srand(time(NULL));
@@ -90,7 +101,7 @@ void main() {
 
 	while (1){
 
-		printf("Выберите один из вариантов:\n0. Закончить программу\n1. Вывести таблицы\n2. Поиск\n3. Сортировка по очкам\n");
+		printf("Спортивное программирование\n\nВыберите один из вариантов:\nВывести таблицы\n	11. Исходную\n	12. Результирующую\n2. Поиск\n3. Сортировка по очкам\n0. Закончить программу\n");
 		scanf_s("%d", &choose);
 
 
@@ -98,22 +109,30 @@ void main() {
 			case 0: { 
 				exit(0);
 			}
-			case 1: {
+			case 11: {
+				system("cls");
 				table1_on_screen(table);
 				printf("\n");
+				break;
+			}
+			case 12: {
+				system("cls");
 				table2_on_screen(table);
 				printf("\n");
 				break;
 			}
 			case 2: {
+				system("cls");
 				printf(".Поиск.\n");
 				break;
 			}
 			case 3: {
+				system("cls");
 				printf("..Сортировка..\n");
 				break;
 			}
 			default: {
+				system("cls");
 				printf("Выберите число из списка!\n");
 				break;
 			}
