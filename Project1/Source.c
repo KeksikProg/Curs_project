@@ -17,11 +17,14 @@ int num_score(int ptr_array[12][15], int index);
 
 void table1_on_screen(int ptr_array[12][15]);
 void table2_on_screen(int ptr_array[12][15]);
+void print_champion_game(int ptr_array[12][15]);
 
 int find_quest(int ptr_array[12][15]);
 
 void sort_2d_array(int ptr_array[12][15]);
 FILE* input_from_file(int ptr_array[12][15]);
+
+void remake_info_from_table(int ptr_array[12][15]);
 //
 
 
@@ -31,8 +34,6 @@ void main() {
 	int table[15][12];
 	srand(time(NULL));
 
-
-	
 
 	printf("Как будет заполняться массив?\n1. Случайно\n2. Из файла\n");
 	scanf_s("%d", &choose_2);
@@ -49,12 +50,16 @@ void main() {
 			input_from_file(table);
 			break;
 		}
+		default: {
+			printf("Выберите 1 или 2!!!");
+			exit(0);
+		}
 	}
 
 
 	while (1) {
 
-		printf("Спортивное программирование\n\nВыберите один из вариантов:\nВывести таблицы\n	11. Исходную\n	12. Результирующую\n2. Поиск\n3. Сортировка по очкам\n0. Закончить программу\n");
+		printf("---------------------------------------------------------------------------------------------------\nСпортивное программирование\n\nВыберите один из вариантов:\nВывести таблицы\n	11. Исходную\n	12. Результирующую\n2. Поиск\n3. Сортировка по очкам\n4. Изменение данных в таблице\n5. Вывести победителя турнира\n0. Закончить программу\n");
 		scanf_s("%d", &choose);
 
 
@@ -84,6 +89,17 @@ void main() {
 			sort_2d_array(table);
 			system("cls");
 			table1_on_screen(table);
+			break;
+		}
+		case 4: {
+			system("cls");
+			remake_info_from_table(table);
+			break;
+		}
+		case 5: {
+			system("cls");
+			print_champion_game(table);
+			printf("\n\n");
 			break;
 		}
 		default: {
@@ -121,7 +137,7 @@ void num_time(int ptr_array[12][15]) {
 
 void num_volume(int ptr_array[12][15]) {
 	for (int i = 0; i < 12; i++) {
-		ptr_array[14][i] = rand() % 100;
+		ptr_array[14][i] = 70 + rand() % (100 - 70 + 1);
 	}
 }
 //
@@ -166,9 +182,9 @@ void table1_on_screen(int ptr_array[12][15]) {
 }
 
 void table2_on_screen(int ptr_array[12][15]) {
-	printf("Id команды   Кол-во баллов\n");
+	printf("Id команды   Кол-во баллов   Кол-во памяти\n");
 	for (int i = 0; i < 12; i++) {
-		printf("%6d              %2d\n", ptr_array[0][i], num_score(ptr_array, i));
+		printf("%6d              %2d		%2d\n", ptr_array[0][i], num_score(ptr_array, i), ptr_array[14][i]);
 	}
 }
 //
@@ -223,37 +239,37 @@ void sort_2d_array(int ptr_array[12][15]) {
 	int choose;
 
 	printf("Сортировка:\n1. По возрастанию\n2. По убыванию\n");
-	scanf_s("%d", &choose);
+scanf_s("%d", &choose);
 
-	if (choose == 1) {
-		for (int i = 0; i < 15; i++) {
-			for (int j = 0; j < 12; j++) {
-				if (ptr_array[13][j] > ptr_array[13][j + 1]) {
-					for (int k = 0; k < 15; k++) {
-						tmp = ptr_array[k][j];
-						ptr_array[k][j] = ptr_array[k][j + 1];
-						ptr_array[k][j + 1] = tmp;
-					}
-				}
-			}
-		}
-	}
-	if (choose == 2) {
-		for (int i = 0; i < 15; i++) {
-			for (int j = 0; j < 11; j++) {
-				if (ptr_array[13][j] < ptr_array[13][j + 1]) {
-					for (int k = 0; k < 15; k++) {
-						tmp = ptr_array[k][j];
-						ptr_array[k][j] = ptr_array[k][j + 1];
-						ptr_array[k][j + 1] = tmp;
-					}
+if (choose == 1) {
+	for (int i = 0; i < 15; i++) {
+		for (int j = 0; j < 12; j++) {
+			if (ptr_array[13][j] > ptr_array[13][j + 1]) {
+				for (int k = 0; k < 15; k++) {
+					tmp = ptr_array[k][j];
+					ptr_array[k][j] = ptr_array[k][j + 1];
+					ptr_array[k][j + 1] = tmp;
 				}
 			}
 		}
 	}
 }
+if (choose == 2) {
+	for (int i = 0; i < 15; i++) {
+		for (int j = 0; j < 11; j++) {
+			if (ptr_array[13][j] < ptr_array[13][j + 1]) {
+				for (int k = 0; k < 15; k++) {
+					tmp = ptr_array[k][j];
+					ptr_array[k][j] = ptr_array[k][j + 1];
+					ptr_array[k][j + 1] = tmp;
+				}
+			}
+		}
+	}
+}
+}
 //
- 
+
 
 //function for input data from file
 FILE* input_from_file(int ptr_array[12][15]) {
@@ -271,8 +287,8 @@ FILE* input_from_file(int ptr_array[12][15]) {
 	table_l = fopen(file_name, "rt");
 
 	while (!feof(table_l)) {
-		if (fgetc(table_l) == '\n')
-			size += 1;
+if (fgetc(table_l) == '\n')
+size += 1;
 	}
 
 	if (size != 12) {
@@ -300,5 +316,112 @@ FILE* input_from_file(int ptr_array[12][15]) {
 		fscanf(table_l, "%d\n", &ptr_array[14][i]);
 	}
 	return 1;
+}
+//
+
+//function for remake info from table
+void remake_info_from_table(int ptr_array[12][15]) {
+	int choose_team, choose_group, choose_value;
+
+	table1_on_screen(ptr_array);
+	printf("\n\nВ какой команде нужно поменять значения?(1-12)\n");
+	scanf_s("%d", &choose_team);
+	system("cls");
+	choose_team = choose_team - 1;
+
+	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти\n");
+	for (int j = 0; j < 15; j++) { //ncols
+		if (j != 13) {
+			printf("%6d ", ptr_array[j][choose_team]);//i * ncols + j
+		}
+		else {
+			if (ptr_array[j][choose_team] % 60 > 9) {
+				printf("   0%d:%2d", ptr_array[j][choose_team] / 60, ptr_array[j][choose_team] % 60);
+			}
+			else {
+				printf("   0%d:0%d", ptr_array[j][choose_team] / 60, ptr_array[j][choose_team] % 60);
+			}
+		}
+	}
+	printf("\n\nКакой столбец нужно поменять?(1-15)\n");
+	scanf_s("%d", &choose_group);
+	choose_group = choose_group - 1;
+
+
+
+	if (choose_group != 13) {
+		printf("На какое значение нужно поменять?\n");
+		scanf_s("%d", &choose_value);
+
+		if ((choose_group == 0) && ((10000 > choose_value) || (choose_value > 99999))) {
+			printf("Введите число с 5 разрядами!!\n\n");
+			return 0;
+		}
+		if (((choose_group > 1) && (choose_group < 12)) && ((choose_value < 0) || (choose_value > 1))) {
+			printf("Введите либо 1 либо 0!!\n\n");
+			return 0;
+		}
+		if ((choose_group == 14) && ((choose_value > 100) || (choose_value < 70))) {
+			printf("Введите число от 70 до 100!!\n\n");
+			return 0;
+		}
+
+		ptr_array[choose_group][choose_team] = choose_value;
+		return 1;
+	}
+	else {
+		int hours, minutes;
+		printf("Ведите кол-во часов и минут через пробел: ");
+		scanf_s("%d %d", &hours, &minutes);
+		if (((hours > 5) || (hours < 0)) || ((minutes > 60) || (minutes < 0))) {
+			printf("Введите кол-во часов до 5 и кол-во минут до 60!!\n\n");
+			return 0;
+		}
+		ptr_array[choose_group][choose_team] = hours * 60 + minutes;
+
+	}
+}
+//
+
+//function for print champion
+void print_champion_game(int ptr_array[12][15]) {
+	int max_score = 0, max_volume = 0, index = 0;
+
+	for (int i = 0; i < 12; i++) {
+
+		if (num_score(ptr_array, i) > max_score) {
+			max_score = num_score(ptr_array, i);
+			max_volume = ptr_array[14][i];
+			index = i;
+		}
+		if (num_score(ptr_array, i) == max_score) {
+			if (ptr_array[14][i] > max_volume) {
+				max_score = num_score(ptr_array, i);
+				max_volume = ptr_array[14][i];
+				index = i;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+
+	printf("Первое место заняла команда:\n");
+	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти\n");
+	for (int j = 0; j < 15; j++) { //ncols
+		if (j != 13) {
+			printf("%6d ", ptr_array[j][index]);//i * ncols + j
+		}
+		else {
+			if (ptr_array[j][index] % 60 > 9) {
+				printf("   0%d:%2d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
+			}
+			else {
+				printf("   0%d:0%d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
+			}
+		}
+	}
+	printf("\n\n");
+	printf("Команда набрала %d баллов и использовала %d памяти\n\n", num_score(ptr_array, index), ptr_array[14][index]);
 }
 //
