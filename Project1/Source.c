@@ -8,23 +8,16 @@
 #define _USE_MATH_DEFINES
 
 //functions
-void id_team(int ptr_array[12]);
-void num_quest(int ptr_array[12][15]);
-void num_time(int ptr_array[12][15]);
-void num_volume(int ptr_array[12][15]);
-
 int num_score(int ptr_array[12][15], int index);
 
-void table1_on_screen(int ptr_array[12][15]);
-void table2_on_screen(int ptr_array[12][15]);
-void print_champion_game(int ptr_array[12][15]);
+void tables_on_screen(int ptr_array[12][15], int attr);
 
 int find_quest(int ptr_array[12][15]);
 
 void sort_2d_array(int ptr_array[12][15]);
-FILE* input_from_file(int ptr_array[12][15]);
+int input_from_file(int ptr_array[12][15]);
 
-void remake_info_from_table(int ptr_array[12][15]);
+int remake_info_from_table(int ptr_array[12][15]);
 //
 
 
@@ -34,28 +27,7 @@ void main() {
 	int table[15][12];
 	srand(time(NULL));
 
-
-	printf("Как будет заполняться массив?\n1. Случайно\n2. Из файла\n");
-	scanf_s("%d", &choose_2);
-
-	switch (choose_2) {
-		case 1: {
-			id_team(table);
-			num_quest(table);
-			num_time(table);
-			num_volume(table);
-			break;
-		}
-		case 2: {
-			input_from_file(table);
-			break;
-		}
-		default: {
-			printf("Выберите 1 или 2!!!");
-			exit(0);
-		}
-	}
-
+	if (input_from_file(table) == 0)  exit(0);
 
 	while (1) {
 
@@ -69,13 +41,13 @@ void main() {
 		}
 		case 11: {
 			system("cls");
-			table1_on_screen(table);
+			tables_on_screen(table, 1);
 			printf("\n");
 			break;
 		}
 		case 12: {
 			system("cls");
-			table2_on_screen(table);
+			tables_on_screen(table, 2);
 			printf("\n");
 			break;
 		}
@@ -88,7 +60,7 @@ void main() {
 			system("cls");
 			sort_2d_array(table);
 			system("cls");
-			table1_on_screen(table);
+			tables_on_screen(table, 1);
 			break;
 		}
 		case 4: {
@@ -98,7 +70,7 @@ void main() {
 		}
 		case 5: {
 			system("cls");
-			print_champion_game(table);
+			tables_on_screen(table, 3);
 			printf("\n\n");
 			break;
 		}
@@ -113,34 +85,6 @@ void main() {
 }
 
 
-
-// Functions for add elements in array
-void id_team(int ptr_array[12]) {
-	for (int i = 0; i < 12; i++) {
-		ptr_array[i] = 10000 + rand() % (99999 - 10000 + 1);
-	}
-}
-
-void num_quest(int ptr_array[12][15]) {
-	for (int i = 1; i < 13; i++) {
-		for (int j = 0; j < 14; j++) {
-			ptr_array[i][j] = rand() % 2;
-		}
-	}
-}
-
-void num_time(int ptr_array[12][15]) {
-	for (int i = 0; i < 12; i++) {
-		ptr_array[13][i] = rand() % 300;
-	}
-}
-
-void num_volume(int ptr_array[12][15]) {
-	for (int i = 0; i < 12; i++) {
-		ptr_array[14][i] = 70 + rand() % (100 - 70 + 1);
-	}
-}
-//
 
 
 //function for sum score for teams
@@ -160,34 +104,75 @@ int num_score(int ptr_array[12][15], int index) {
 
 
 //function for table on screen
-void table1_on_screen(int ptr_array[12][15]) {
-	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти");
-	for (int i = 0; i < 12; i++) { //nlines
-		printf("\n");
-		for (int j = 0; j < 15; j++) { //ncols
-			if (j != 13) {
-				printf("%6d ", ptr_array[j][i]);//i * ncols + j
-			}
-			else {
-				if (ptr_array[j][i] % 60 > 9) {
-					printf("   0%d:%2d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+void tables_on_screen(int ptr_array[12][15], int attr) {
+	if (attr == 1) {
+		printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти");
+		for (int i = 0; i < 12; i++) { //nlines
+			printf("\n");
+			for (int j = 0; j < 15; j++) { //ncols
+				if (j != 13) {
+					printf("%6d ", ptr_array[j][i]);//i * ncols + j
 				}
 				else {
-					printf("   0%d:0%d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+					if (ptr_array[j][i] % 60 > 9) {
+						printf("   0%d:%2d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+					}
+					else {
+						printf("   0%d:0%d", ptr_array[j][i] / 60, ptr_array[j][i] % 60);
+					}
 				}
 			}
 		}
+		printf("\n");
 	}
-	printf("\n");
+	if (attr == 2) {
+		printf("Id команды   Кол-во баллов   Кол-во памяти\n");
+		for (int i = 0; i < 12; i++) {
+			printf("%6d              %2d		%2d\n", ptr_array[0][i], num_score(ptr_array, i), ptr_array[14][i]);
+		}
+	}
+	if (attr == 3) {
+		int max_score = 0, max_volume = 0, index = 0;
+
+		for (int i = 0; i < 12; i++) {
+
+			if (num_score(ptr_array, i) > max_score) {
+				max_score = num_score(ptr_array, i);
+				max_volume = ptr_array[14][i];
+				index = i;
+			}
+			if (num_score(ptr_array, i) == max_score) {
+				if (ptr_array[14][i] < max_volume) {
+					max_score = num_score(ptr_array, i);
+					max_volume = ptr_array[14][i];
+					index = i;
+				}
+				else {
+					continue;
+				}
+			}
+		}
+
+		printf("Первое место заняла команда:\n");
+		printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти\n");
+		for (int j = 0; j < 15; j++) { //ncols
+			if (j != 13) {
+				printf("%6d ", ptr_array[j][index]);//i * ncols + j
+			}
+			else {
+				if (ptr_array[j][index] % 60 > 9) {
+					printf("   0%d:%2d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
+				}
+				else {
+					printf("   0%d:0%d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
+				}
+			}
+		}
+		printf("\n\n");
+		printf("Команда набрала %d баллов и использовала %d памяти\n\n", num_score(ptr_array, index), ptr_array[14][index]);
+	}
 }
 
-void table2_on_screen(int ptr_array[12][15]) {
-	printf("Id команды   Кол-во баллов   Кол-во памяти\n");
-	for (int i = 0; i < 12; i++) {
-		printf("%6d              %2d		%2d\n", ptr_array[0][i], num_score(ptr_array, i), ptr_array[14][i]);
-	}
-}
-//
 
 
 //function for find tasks
@@ -272,7 +257,7 @@ if (choose == 2) {
 
 
 //function for input data from file
-FILE* input_from_file(int ptr_array[12][15]) {
+int input_from_file(int ptr_array[12][15]) {
 	char  extension[6] = { ".txt\0" };
 	char file_name[40] = "data";
 	int size = 0;
@@ -287,13 +272,13 @@ FILE* input_from_file(int ptr_array[12][15]) {
 	table_l = fopen(file_name, "rt");
 
 	while (!feof(table_l)) {
-if (fgetc(table_l) == '\n')
-size += 1;
+		if (fgetc(table_l) == '\n')
+		size += 1;
 	}
 
 	if (size != 12) {
 		printf("В файле указано слишком мало данных, должно быть 12, а передано %d, если все верно нажмите ентер после последнего элемента в файле", size);
-		exit(0);
+		return 0;
 	}
 
 	fseek(table_l, 0, SEEK_SET); // Нужно, чтобы переместиться к началу чтения файла
@@ -320,14 +305,15 @@ size += 1;
 //
 
 //function for remake info from table
-void remake_info_from_table(int ptr_array[12][15]) {
+int remake_info_from_table(int ptr_array[12][15]) {
 	int choose_team, choose_group, choose_value;
 
-	table1_on_screen(ptr_array);
+	tables_on_screen(ptr_array,1);
 	printf("\n\nВ какой команде нужно поменять значения?(1-12)\n");
 	scanf_s("%d", &choose_team);
 	system("cls");
 	choose_team = choose_team - 1;
+	if (choose_team > 11) return 0;
 
 	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти\n");
 	for (int j = 0; j < 15; j++) { //ncols
@@ -380,48 +366,5 @@ void remake_info_from_table(int ptr_array[12][15]) {
 		ptr_array[choose_group][choose_team] = hours * 60 + minutes;
 
 	}
-}
-//
-
-//function for print champion
-void print_champion_game(int ptr_array[12][15]) {
-	int max_score = 0, max_volume = 0, index = 0;
-
-	for (int i = 0; i < 12; i++) {
-
-		if (num_score(ptr_array, i) > max_score) {
-			max_score = num_score(ptr_array, i);
-			max_volume = ptr_array[14][i];
-			index = i;
-		}
-		if (num_score(ptr_array, i) == max_score) {
-			if (ptr_array[14][i] > max_volume) {
-				max_score = num_score(ptr_array, i);
-				max_volume = ptr_array[14][i];
-				index = i;
-			}
-			else {
-				continue;
-			}
-		}
-	}
-
-	printf("Первое место заняла команда:\n");
-	printf("Id команды Зад.1 Зад.2 Зад.3 Зад.4   Зад.5 Зад.6  Зад.7   Зад.8   Зад.9 Зад.10 Зад.11 Зад.12 Ост.время Исп.памяти\n");
-	for (int j = 0; j < 15; j++) { //ncols
-		if (j != 13) {
-			printf("%6d ", ptr_array[j][index]);//i * ncols + j
-		}
-		else {
-			if (ptr_array[j][index] % 60 > 9) {
-				printf("   0%d:%2d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
-			}
-			else {
-				printf("   0%d:0%d", ptr_array[j][index] / 60, ptr_array[j][index] % 60);
-			}
-		}
-	}
-	printf("\n\n");
-	printf("Команда набрала %d баллов и использовала %d памяти\n\n", num_score(ptr_array, index), ptr_array[14][index]);
 }
 //
